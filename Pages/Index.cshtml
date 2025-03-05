@@ -1,0 +1,153 @@
+﻿@page
+@model IndexModel
+
+
+
+<main id="app">
+    <div class="file-upload" v-if="!dragging">
+        <label for="file-input" role="button">Click to upload or drag files here...</label>
+        <form><input id="file-input" name="files" type="file" multiple hidden v-on:change="uploadFiles($event.target.files); $event.target.form.reset()" /></form>
+    </div>
+    <div class="file-drag" v-if="dragging">Drop files anywhere to upload.</div>
+
+
+    <div>
+        <p v-if="files.length == 0">No files have been uploaded yet. Drag and drop some files here.</p>
+        <p v-else>Files: {{ files.length }} </p>
+    </div>
+
+    <div v-if="message">{{ message }}</div>
+
+    <div class="file-list">
+        <div class="qr">
+            <div id="file-qr"></div>
+
+            <p>Scan the QR code to open this page on your phone.</p>
+        </div>
+
+        <template v-for="f in files">
+            <div v-if="isImage(f)">
+                <a v-bind:href="'/files/' + f" download>{{ f }}</a>
+                <a v-bind:href="'/files/' + f"><img v-bind:src="'/files/thumbnails/' + f + '.jpg'" /></a>
+            </div>
+            <div v-else-if="isVideo(f)">
+                <a v-bind:href="'/files/' + f" download>{{ f }}</a>
+                <a v-bind:href="'/files/' + f"><img v-bind:src="'/files/thumbnails/' + f + '.jpg'" /></a>
+            </div>
+            <div v-else>
+                <a v-bind:href="'/files/' + f" download>{{ f }}</a>
+            </div>
+        </template>
+    </div>
+
+</main>
+
+<p>@DateTime.Now</p>
+
+<script type="text/javascript">
+
+    let app = Vue.createApp({
+        data: function () {
+            return {
+                files: [],
+                dragging: false,
+                message: '',
+            };
+        },
+        mounted: function () {
+            const vue = this;
+
+            this.getFiles();
+
+            const eventSource = new EventSource("/api/notify");
+            eventSource.onmessage = this.onMessage;
+
+            const qr = new QRCode(document.getElementById("file-qr"), {
+                text: window.location.href,
+                width: 128,
+                height: 128,
+            });
+
+            document.addEventListener('dragover', function (e) {
+                vue.dragging = true;
+                e.dataTransfer.dropEffect = 'copy';
+                e.preventDefault();
+            });
+
+            document.addEventListener('dragleave', function (e) {
+                vue.dragging = false;
+            });
+
+            document.addEventListener('drop', function (e) {
+                vue.dragging = false;
+                if (e.dataTransfer.files.length > 0)
+                    vue.uploadFiles(e.dataTransfer.files);
+                e.preventDefault();
+            });
+
+        },
+        methods: {
+            getFiles: function () {
+                fetch('/api/files').then(response => response.json()
+                ).then(data => {
+                    this.files = data;
+                }).catch(error => {
+                    console.error(error);
+                });
+            },
+            uploadFiles(files) {
+                this.message = 'Uploading...';
+
+                let form = new FormData();
+                for (const file of files) {
+                    console.log(file);
+                    form.append('upload', file, file.name)
+                }
+
+                fetch('/api/files', {
+                    method: 'POST',
+                    body: form,
+                    signal: AbortSignal.timeout(60000),
+                }).then(response => response.json()
+                ).then(data => {
+                    //console.log(data);
+                    this.message = '';
+                }).catch(error => {
+                    this.message = error;
+                    console.error(error);
+                });
+
+            },
+            onMessage(event) {
+                //console.log("Received:", event.data);
+                let data = JSON.parse(event.data);
+                if (data.Action == 'FileAdded') {
+                    let i = this.files.indexOf(data.FileName);
+                    if (i < 0) {
+                        this.files.unshift(data.FileName);
+                    }
+                    else if (i > 0) {
+                        this.files.splice(i, 1);
+                    }
+                }
+                if (data.Action == 'FileDeleted') {
+                    this.files = this.files.filter(f => f != data.FileName);
+                }
+            },
+            isImage(file) { 
+                return /\.(jpe?g|png|webp|gif)$/i.test(file);
+            },
+            isVideo(file) {
+                return /\.(mov|mp4|mkv|avi)$/i.test(file);
+            },
+
+        },
+    });
+
+    app.mount('#app');
+
+
+</script>
+
+
+

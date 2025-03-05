@@ -1,0 +1,19 @@
+# Auto detect text files and perform LF normalization
+*          text=auto
+
+*.cs       text diff=csharp
+*.cshtml   text diff=html
+*.txt      text
+*.md       text diff=markdown
+*.css      text diff=css
+*.json     text
+*.js       text
+
+
+*.sln      text eol=crlf
+*.csproj   text eol=crlf
+
+
+
+.gitattributes    text
+.gitignore        text

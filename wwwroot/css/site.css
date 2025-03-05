@@ -1,0 +1,20 @@
+html { font-size: 16px; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; }
+
+@media (max-width: 768px) {
+    html { font-size: 16px; }
+    .qr { display: none; }
+}
+
+html { position: relative; min-height: 100%; }
+
+body { margin-bottom: 60px; }
+
+main {  }
+
+.file-list { margin: 10px 0; display: flex; flex-wrap: wrap; }
+.file-list > div { margin: 5px; padding: 5px; border: solid 1px #ddd; max-width: 300px; }
+.file-list img { max-width: 300px; max-height: 200px; display: block; }
+.file-drag { border: dotted 2px #333; background-color: cornsilk; text-align: center; font-size: 2em; padding: 20px; }
+
+label[role=button] { display: block; border-radius: 5px; padding: 10px; font-size: 2em; background-color: darkblue; color: #fff; cursor: pointer; }
+label[role=button]:hover { opacity: 0.9; }

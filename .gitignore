@@ -1,0 +1,10 @@
+Debug
+Bin
+Obj
+packages
+.vs
+.config
+*.user
+
+wwwroot/files
+dist
