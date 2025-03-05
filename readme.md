@@ -4,6 +4,8 @@ A simple file sharing tool that allows for easy temporary sharing of documents b
 
 It's meant to be a low friction way to transfer files/photos/videos without having to use cloud services.
 
+![Screenshot](screenshot.png)
+
 
 # How to use
 
