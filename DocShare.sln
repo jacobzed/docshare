@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocShare", "DocShare.csproj", "{316948B1-AF5B-409E-A40F-9205690BD8B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocShareTests", "tests\DocShareTests.csproj", "{289D3A88-F949-C97A-39EF-3C2B84702CAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{316948B1-AF5B-409E-A40F-9205690BD8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{316948B1-AF5B-409E-A40F-9205690BD8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{316948B1-AF5B-409E-A40F-9205690BD8B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{289D3A88-F949-C97A-39EF-3C2B84702CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{289D3A88-F949-C97A-39EF-3C2B84702CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{289D3A88-F949-C97A-39EF-3C2B84702CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{289D3A88-F949-C97A-39EF-3C2B84702CAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

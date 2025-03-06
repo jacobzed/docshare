@@ -105,14 +105,23 @@ namespace DocShare.Helpers
         }
 
         /// <summary>
-        /// Sanitize a filename to remove chars that need url encoding and avoid path traversal attacks.
+        /// Sanitize filename to:
+        /// Remove illegal windows file names
+        /// Remove chars that need url encoding
+        /// Avoid path traversal attacks
         /// </summary>
         private string SanitizeName(string fileName)
         {
             var name = Regex.Replace(fileName, @"[^\w\-.]", "-");
             name = Regex.Replace(name, @"-{2,}", "-");
-            name = name.Trim('.');
-            name = name.Trim('-');
+            name = Regex.Replace(name, @"\.{2,}", ".");
+            name = name.Replace("-.", ".");
+            name = name.TrimEnd('.');
+            name = name.Trim('-'); // cosmetic
+            if (Regex.IsMatch(name, @"^(CON|PRN|AUX|NUL|COM\d|LPT\d)(\.|$)", RegexOptions.IgnoreCase))
+                name = "_" + name;
+            if (name.Length > 100)
+                name = name.Substring(0, 100);
             return name;
         }
 

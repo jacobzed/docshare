@@ -40,25 +40,22 @@ namespace DocShare.Helpers
 
             foreach (var (id, client) in _clients)
             {
+                await client.Lock.WaitAsync();
                 try
                 {
-                    await client.Lock.WaitAsync();
-                    try
-                    {
-                        await client.Writer.WriteAsync("data: ");
-                        await client.Writer.WriteAsync(JsonSerializer.Serialize(message));
-                        await client.Writer.WriteAsync("\n\n");
-                        await client.Writer.FlushAsync();
-                    }
-                    finally
-                    {
-                        client.Lock.Release();
-                    }
+                    await client.Writer.WriteAsync("data: ");
+                    await client.Writer.WriteAsync(JsonSerializer.Serialize(message));
+                    await client.Writer.WriteAsync("\n\n");
+                    await client.Writer.FlushAsync();
                 }
                 catch
                 {
                     // If writing fails, mark the client for removal
                     disconnected.Add(id);
+                }
+                finally
+                {
+                    client.Lock.Release();
                 }
             }
 
@@ -80,6 +77,10 @@ namespace DocShare.Helpers
                     await client.Writer.WriteAsync(JsonSerializer.Serialize(message));
                     await client.Writer.WriteAsync("\n\n");
                     await client.Writer.FlushAsync();
+                }
+                catch
+                {
+                    RemoveClient(id);
                 }
                 finally
                 {

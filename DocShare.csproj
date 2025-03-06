@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="dist\**" />
+    <Compile Remove="tests\**" />
     <Compile Remove="wwwroot\files\**" />
     <Content Remove="dist\**" />
+    <Content Remove="tests\**" />
     <Content Remove="wwwroot\files\**" />
     <EmbeddedResource Remove="dist\**" />
+    <EmbeddedResource Remove="tests\**" />
     <EmbeddedResource Remove="wwwroot\files\**" />
     <None Remove="dist\**" />
+    <None Remove="tests\**" />
     <None Remove="wwwroot\files\**" />
   </ItemGroup>
 
